@@ -1,3 +1,6 @@
+const Sequelize = require('sequelize')
+const crypto = require('crypto')
+
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
@@ -18,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     unique: true,
     allowNull: false,
     get() {
-        return () => this.getDataValue('password')
+        return () => this.getDataValue('email')
     }
 },
   salt: {
@@ -54,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
   User.beforeCreate(setSaltAndPassword)
   User.beforeUpdate(setSaltAndPassword)
 
-  User.correctPassword = function(enteredPassword) {
+  User.prototype.correctPassword = function(enteredPassword) {
   return User.encryptPassword(enteredPassword, this.salt()) === this.password()
 }
 
