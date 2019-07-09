@@ -8,6 +8,7 @@ module.exports = (app) =>
 app.get('/api/films',Films.getFilms)
 app.post('/api/films',Films.createFilm)
 app.post('/api/films/fetch',Films.fetchFilm)
+app.post('/api/films/delete',Films.DeleteFilm)
 
 app.post('/api/ratings',Ratings.createRating)
 app.get('/api/ratings',Ratings.getRating)

@@ -33,5 +33,16 @@ class Films {
             .catch(err => res.status(401).send({ success: false, message: 'Rating could not be set', err }));
     }
 
+    static DeleteFilm(req,res){
+        const {filmname}=req.body;
+        films.destroy({
+            where: {
+                filmTitle: filmname
+            }
+          })
+          .then(filmData => res.status(201).send({ success: true, message: 'Film Deleted', filmData })) 
+          .catch(err => res.status(401).send({ success: false, message: 'Film does not exist', err }));
+    }
+
 }
 module.exports = Films;
