@@ -13,7 +13,7 @@ app.post('/api/films/delete',Films.DeleteFilm)
 app.post('/api/ratings',Ratings.createRating)
 app.get('/api/ratings',Ratings.getRating)
 
-app.post('/api/ratings/set',Films.add)
+app.post('/api/ratings/set',Films.addnewRating)
 
 
 app.post('/signup', Users.signUp)
