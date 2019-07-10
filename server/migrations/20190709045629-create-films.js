@@ -1,11 +1,10 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('films', {
+    return queryInterface.createTable('Film', {
 
-      filmID: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
+      id: {
+        type: Sequelize.UUID,
         primaryKey: true,
         allowNull:false
     },
@@ -40,6 +39,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('films');
+    return queryInterface.dropTable('Film');
   }
 };

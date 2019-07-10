@@ -1,10 +1,9 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('ratings', {
+    return queryInterface.createTable('Rating', {
       id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
+        type: Sequelize.UUID,
         primaryKey: true,
         allowNull:false
       },
@@ -14,10 +13,10 @@ module.exports = {
       },
              
     filmid: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.UUID,
       references: {
-          model: 'films',
-          key: 'filmID'
+          model: 'Film',
+          key: 'id'
 
       },
       onUpdate: 'cascade',
@@ -34,6 +33,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('ratings');
+    return queryInterface.dropTable('Rating');
   }
 };
