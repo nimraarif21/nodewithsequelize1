@@ -12,11 +12,9 @@ module.exports = {
           type: Sequelize.STRING,
           allowNull:false
       },
-
-         //foreign key usage
+             
     filmid: {
       type: Sequelize.INTEGER,
-
       references: {
           model: 'films',
           key: 'filmID'

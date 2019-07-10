@@ -29,7 +29,7 @@ average_score: {
   });
   
   Film.associate = function(models) {
-    Film.hasMany(models.ratings, {foreignKey : 'filmID'})
+    Film.hasMany(models.ratings, { as: 'ratings' })
   };
 
 const setAverage_score = film => {

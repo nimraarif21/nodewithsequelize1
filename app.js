@@ -22,6 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.set('superSecret', config.JWT_SECRET);
 
+
 // app.use('/api',function(req, res, next) {
 //   var token = req.body.token || req.query.token || req.headers['x-access-token'];
 //   if (token) {

@@ -17,7 +17,7 @@ class Films {
 
     static fetchRating(req,res){
         const {RatingID}=req.body;
-        return films.findOne({ where: {id: RatingID} }).then(filmData => res.status(201).send({ success: true, message: 'rating data retrieved', filmData })) 
+        return films.findOne({ where: {filmID: RatingID} }).then(filmData => res.status(201).send({ success: true, message: 'rating data retrieved', filmData })) 
         .catch(err => res.status(401).send({ success: false, message: 'rating does not exist', err }));
           
     }

@@ -12,7 +12,7 @@ class Films {
     } 
     static getFilms(req, res) { 
         return films.findAll()
-        .then((filmData )=> res.status(201).send({ success: true, message: 'hello:', filmData })) 
+        .then((filmData )=> res.status(201).send({ success: true, message: 'All the films:', filmData })) 
 
     }
 
@@ -27,18 +27,19 @@ class Films {
     static addRating(req,res){
         const {filmname,RatingID}=req.body;
         const rating=ratings.findOne({ where: {id: RatingID} });
-        const film=films.findOne({where:{filmTitle:filmname}})
-        return film.setratings(rating)
+        return films.findOne({where:{filmTitle:filmname}})
+      
         .then(filmData => res.status(201).send({ success: true, message: 'Rating set', filmData })) 
             .catch(err => res.status(401).send({ success: false, message: 'Rating could not be set', err }));
     }
 
     static DeleteFilm(req,res){
         const {filmname}=req.body;
-        films.destroy({
-            where: {
-                filmTitle: filmname
-            }
+
+        return films.findOne({ where :{filmTitle: filmname }})
+        .then(results => {
+            console.log(results);
+            return results.destroy({ force: true });
           })
           .then(filmData => res.status(201).send({ success: true, message: 'Film Deleted', filmData })) 
           .catch(err => res.status(401).send({ success: false, message: 'Film does not exist', err }));
