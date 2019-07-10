@@ -3,26 +3,14 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('ratings', {
       id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
+     type: Sequelize.INTEGER,
         primaryKey: true,
-        allowNull:false
+        allowNull:false,
+        autoIncrement:true
       },
-    score: {
-          type: Sequelize.STRING,
-          allowNull:false
-      },
-             
-    filmid: {
-      type: Sequelize.INTEGER,
-      references: {
-          model: 'films',
-          key: 'filmID'
-
-      },
-      onUpdate: 'cascade',
-      onDelete: 'cascade'
-  },
+      score: {
+        type: Sequelize.INTEGER,
+    },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

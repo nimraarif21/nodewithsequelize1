@@ -3,11 +3,11 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('films', {
 
-      filmID: {
+      id: {
         type: Sequelize.INTEGER,
-        autoIncrement: true,
         primaryKey: true,
-        allowNull:false
+        allowNull:false,
+        autoIncrement:true
     },
       filmTitle: {
         type: Sequelize.STRING,

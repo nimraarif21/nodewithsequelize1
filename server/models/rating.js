@@ -1,19 +1,20 @@
-const Film=require('./films');
+
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Rating = sequelize.define('ratings', {
+  const rating = sequelize.define('rating', {
     id: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+      primaryKey: true,
+      allowNull:false,
+      autoIncrement:true
   },
  score: {
       type: DataTypes.STRING,
   },
 });
-Rating.associate = function(models) {
-  // Rating.belongsTo(Films, {foreignKey: 'filmID'})
+rating.associate = function(models) {
+  // rating.belongsTo(Films, {foreignKey: 'filmID'})
 };
 
-  return Rating;
+  return rating;
 };

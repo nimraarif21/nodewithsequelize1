@@ -1,12 +1,12 @@
-const Rating = require('./rating');
 
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Film = sequelize.define('films', {
-    filmID: {
+  const film = sequelize.define('film', {
+    id: {
       type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true
+      primaryKey: true,
+      allowNull:false,
+      autoIncrement:true
   },
     filmTitle: {
       type: DataTypes.STRING,
@@ -27,18 +27,20 @@ average_score: {
     type: DataTypes.INTEGER
 },
   });
+
+//  film.hasMany(models.rating, {as: 'Ratings'})
   
-  Film.associate = function(models) {
-    Film.hasMany(models.ratings, { as: 'ratings' })
+  film.associate = function(models) {
+    film.hasMany(models.rating, { as: 'ratings' })
   };
 
 const setAverage_score = film => {
     
 }
-Film.beforeCreate(setAverage_score)
-Film.beforeUpdate(setAverage_score)
+film.beforeCreate(setAverage_score)
+film.beforeUpdate(setAverage_score)
 
-  return Film;
+  return film;
 };
 
 

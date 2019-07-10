@@ -3,7 +3,13 @@ const crypto = require('crypto')
 
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
+  const user = sequelize.define('user', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull:false,
+      autoIncrement:true
+  },
     username: {
       type: DataTypes.STRING,
       unique: true,
@@ -32,14 +38,14 @@ module.exports = (sequelize, DataTypes) => {
   }
 
   });
-  User.associate = function(models) {
+  user.associate = function(models) {
     // associations can be defined here
   };
 
-  User.generateSalt = function() {
+  user.generateSalt = function() {
     return crypto.randomBytes(16).toString('base64')
   }
-  User.encryptPassword = function(plainText, salt) {
+  user.encryptPassword = function(plainText, salt) {
     return crypto
         .createHash('RSA-SHA256')
         .update(plainText)
@@ -49,17 +55,17 @@ module.exports = (sequelize, DataTypes) => {
   
   const setSaltAndPassword = user => {
     if (user.changed('password')) {
-        user.salt = User.generateSalt()
-        user.password = User.encryptPassword(user.password(), user.salt())
+        user.salt = user.generateSalt()
+        user.password = user.encryptPassword(user.password(), user.salt())
     }
   }
 
-  User.beforeCreate(setSaltAndPassword)
-  User.beforeUpdate(setSaltAndPassword)
+  user.beforeCreate(setSaltAndPassword)
+  user.beforeUpdate(setSaltAndPassword)
 
-  User.prototype.correctPassword = function(enteredPassword) {
-  return User.encryptPassword(enteredPassword, this.salt()) === this.password()
+  user.prototype.correctPassword = function(enteredPassword) {
+  return user.encryptPassword(enteredPassword, this.salt()) === this.password()
 }
 
-  return User;
+  return user;
 };
