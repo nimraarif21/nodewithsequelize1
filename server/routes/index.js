@@ -17,4 +17,5 @@ app.post('/api/ratings/set',Films.addnewRating)
 
 
 app.post('/signup', Users.signUp)
-app.post('/login',Users.Login)};
+app.post('/login',Users.Login)
+app.post('/api/changepassword', Users.changePassword)};
