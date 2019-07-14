@@ -2,7 +2,7 @@ const model = require('../models');
 const {ratings} = model;
 let result = {};
 let status = 201;
-class Films { 
+class Ratings { 
     static createRating(req, res) { 
         const { score } = req.body ;
         return ratings.create({score}) 
@@ -23,4 +23,4 @@ class Films {
     }
 
 }
-module.exports = Films;
+module.exports = Ratings;

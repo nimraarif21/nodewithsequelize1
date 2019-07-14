@@ -38,6 +38,19 @@ class Film {
             })
     }
 
+    static fetchSpecificRating(req,res){
+      const filmID=req.params.id;
+      const ratingID=req.params.ratingId;
+      return film.findOne({where:{id:filmID}}).then(function(Film) {
+        console.log("coming here")
+        return Film.hasRatings({where:{id:ratingID}})
+                .then(filmData => res.status(201).send({ success: true, message: 'Rating successfully added', filmData })) 
+                .catch(err => res.status(401).send({ success: false, message: 'Rating could not be added', err }));
+              })
+            
+        .catch(err => res.status(401).send({ success: false, message: 'Film does not exist', err }));
+  }
+
     static DeleteFilm(req,res){
         const filmID=req.params.id;
         return film.findOne({ where :{id: filmID }})

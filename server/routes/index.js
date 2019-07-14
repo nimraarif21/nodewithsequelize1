@@ -24,7 +24,7 @@ app.get('/api/films/:id',Films.fetchFilm)
 app.delete('/api/films/:id',Films.DeleteFilm) 
 app.post('/api/ratings/set',Films.addnewRating) 
 app.put('/api/films/:id', Films.updateFilm)
-// app.get('/api/films/:id/ratings/:ratingId',Films.fetchSpecificRating)
+app.get('/api/films/:id/ratings/:ratingId',Films.fetchSpecificRating)
 
 //Ratings
 app.post('/api/ratings',Ratings.createRating)
