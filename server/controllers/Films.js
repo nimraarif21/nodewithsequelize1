@@ -12,15 +12,15 @@ class Film {
     }
 
     static getFilms(req, res) { 
-        return film.findAll({include:[
-     {  model:rating, as:'ratings', required: true}]}) 
-        .then((filmData )=> res.status(201).send({ success: true, message: 'All the film:', filmData })) 
+        return film.findAll({include:[{model:rating, as:'ratings', required: true}]}) 
+        .then((filmData )=> res.status(201).send({ success: true, message: 'All the films:', filmData })) 
+        .catch(err => res.status(401).send({ success: false, message: 'Could not retrieve all films', err }));
 
     }
 
     static fetchFilm(req,res){
-        const {filmname}=req.body;
-        return film.findOne({ where: {filmTitle: filmname} },{include:[{model:rating, as:'ratings', required: true}]})
+        const filmID=req.params.id;
+        return film.findOne({ where: {id: filmID} },{include:[{model:rating, as:'ratings', required: true}]})
         .then(filmData => res.status(201).send({ success: true, message: 'Film Data retrieved', filmData })) 
         .catch(err => res.status(401).send({ success: false, message: 'Film does not exist', err }));
           
@@ -39,16 +39,40 @@ class Film {
     }
 
     static DeleteFilm(req,res){
-        const {filmname}=req.body;
-
-        return film.findOne({ where :{filmTitle: filmname }})
+        const filmID=req.params.id;
+        return film.findOne({ where :{id: filmID }})
         .then(results => {
-            console.log(results);
             return results.destroy({ force: true });
           })
           .then(filmData => res.status(201).send({ success: true, message: 'Film Deleted', filmData })) 
           .catch(err => res.status(401).send({ success: false, message: 'Film does not exist', err }));
     }
+
+    static updateFilm(req,res){
+      const {description} = req.body;
+      const filmID=req.params.id;
+      return film.findOne({where:{id:filmID}})
+      .then(function(filmdata){
+          if(!filmdata){
+          status=401;
+          result.status = 401;
+          result.error = `Incorrect FilmID`;
+          res.status(status).send(result);
+          }
+          else{
+                 filmdata.update(
+                      {
+                          description:description
+                      })
+                  status=200;
+                  result.status = status;
+                  res.status(status).send(result);
+              }
+      })
+       .catch(err => res.status(401).send({ success: false, message: 'Could not update film', err }));
+  
+  }
+  
 
 }
 module.exports = Film;
