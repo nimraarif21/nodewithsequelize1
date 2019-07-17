@@ -27,7 +27,7 @@ class Film {
     }
     static addnewRating(req,res){
         const {filmname,score}=req.body;
-        film.findOne({where:{filmTitle:filmname}}).then(function(Film) {
+return film.findOne({where:{filmTitle:filmname}}).then(function(Film) {
           return rating.create({score}).then(function(Rating) {
               return Film.addRatings(Rating).then(function() {
                 return Film.hasRatings(Rating)

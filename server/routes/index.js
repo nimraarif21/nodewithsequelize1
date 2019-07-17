@@ -3,6 +3,11 @@ const Films=require('../controllers/Films')
 const Ratings=require('../controllers/ratings')
 module.exports = (app) => 
 { 
+    app.use(function(req, res, next) {
+        res.set("Access-Control-Allow-Origin", "*") 
+        res.set("Access-Control-Allow-Credentials", true )
+        next();
+    });
 app.get('/api', (req, res) => res.status(200)
     .send({message: 'Welcome to the FILMS API!', })); 
 
