@@ -25,7 +25,7 @@ class users {
                 if(userdata.correctPassword(password)==true)
                 {
                     status=200;
-                    const payload = { userdata: userdata };
+                    const payload = { userdata: userdata.id };
                     const options = { expiresIn: '2d', issuer: 'https://scotch.io' };
                     const secret = 'karkun';
                     const token = jwt.sign(payload, secret, options);
@@ -108,39 +108,21 @@ static updateProfile(req,res){
 }
 
 
-static authenticateToken(token)
-{
-    if (token) {
-        jwt.verify(token,'karkun', function(err, decoded) {       
-                if (err) {
-            return res.json({ 
-                    success: false, message: 'Failed to authenticate token.' });       
-            } else {
-            req.decoded = decoded; 
-            return         
-          }
-        });
-    
-      } else {
-        return res.status(403).send({ 
-            success: false, 
-            message: 'No token provided.' 
-        });
-    
-      }
-}
+
 static fetchProfile(req,res)
 {
     var authorization=req.headers['authorization']
-    console.log(authorization);
-        try {
-            var decoded = jwt.verify(authorization, 'karkun');
-            console.log(decoded)
-        } catch (e) {
-            console.log(e)
-            return res.status(401).send('unauthorized');
+    let decoded=authenticateToken(authorization);
+    if(decoded==-2)
+        {
+            return res.status(401).send('No token provided');
         }
-        var userId = decoded.userdata.id; 
+    else if (decoded==-1)
+        {
+            return res.status(401).send('Invalid Token');
+        }
+    else{
+        let userId = decoded; 
         console.log(userId)
         user.findOne({where:{id:userId}}).then(function(userdata){
             status=200;
@@ -152,6 +134,22 @@ static fetchProfile(req,res)
 
 }
 }
-  
+}
+function authenticateToken(token)
+{
+    if (token) {
+        try {
+            var decoded = jwt.verify(token, 'karkun');
+            console.log(decoded)
+            return decoded.userdata
+        } catch (e) {
+            return -1
+        }
+    
+      } else {
+        return -2;
+      }
+}
+exports.default =authenticateToken;
 
 module.exports = users;

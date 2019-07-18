@@ -27,8 +27,6 @@ average_score: {
     type: DataTypes.INTEGER
 },
   });
-
-//  film.hasMany(models.rating, {as: 'Ratings'})
   
   film.associate = function(models) {
     film.hasMany(models.rating, { as: 'ratings' })

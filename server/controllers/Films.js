@@ -1,6 +1,9 @@
 const model = require('../models');
+const UserController = require('./User');
 const {film} = model;
 const{rating} = model;
+const{user} = model;
+const jwt = require('jsonwebtoken');
 let result = {};
 let status = 201;
 class Film { 
@@ -13,8 +16,8 @@ class Film {
 
     static getFilms(req, res) { 
         return film.findAll({include:[{model:rating, as:'ratings', required: true}]}) 
-        .then((filmData )=> res.status(201).send({ success: true, message: 'All the films:', filmData })) 
-        .catch(err => res.status(401).send({ success: false, message: 'Could not retrieve all films', err }));
+        .then(filmData=> res.status(201).send({ success: true, message: 'All the films:', filmData })) 
+        .catch(err => res.status(401).send({ success: false, message: 'Could not retrieve all films', err }))
 
     }
 
@@ -25,24 +28,40 @@ class Film {
         .catch(err => res.status(401).send({ success: false, message: 'Film does not exist', err }));
           
     }
-    static addnewRating(req,res){
-        const {filmname,score}=req.body;
-return film.findOne({where:{filmTitle:filmname}}).then(function(Film) {
-          return rating.create({score}).then(function(Rating) {
-              return Film.addRatings(Rating).then(function() {
-                return Film.hasRatings(Rating)
-                  .then(filmData => res.status(201).send({ success: true, message: 'Rating successfully added', filmData })) 
-                  .catch(err => res.status(401).send({ success: false, message: 'Rating could not be added', err }));
-                })
-              })
-            })
+    static async addnewRating(req,res){
+      const {filmId,score}=req.body;
+      var authorization=req.headers['authorization']
+      let userId=authenticateToken(authorization);
+      if(userId==-2)
+          {
+              return res.status(401).send('No token provided');
+          }
+      else if (userId==-1)
+          {
+              return res.status(401).send('Invalid Token');
+          }
+      else{
+
+          try {
+            let userdata = await user.findOne({where:{id:userId}})
+            let filmdata = await film.findOne({where:{id:filmId}})
+            let Rating = await rating.create({score})
+            await userdata.addRatings(Rating)
+            await filmdata.addRatings(Rating)
+            res.status(201).send({ success: true, message: 'Rating successfully added', filmdata }) 
+
+          } catch(error){
+            console.log(error)
+            res.status(201).send({ success: false, error, error }) 
+          }
+        }
+        
     }
 
     static fetchSpecificRating(req,res){
       const filmID=req.params.id;
       const ratingID=req.params.ratingId;
       return film.findOne({where:{id:filmID}}).then(function(Film) {
-        console.log("coming here")
         return Film.hasRatings({where:{id:ratingID}})
                 .then(filmData => res.status(201).send({ success: true, message: 'Rating successfully added', filmData })) 
                 .catch(err => res.status(401).send({ success: false, message: 'Rating could not be added', err }));
@@ -87,5 +106,21 @@ return film.findOne({where:{filmTitle:filmname}}).then(function(Film) {
   }
   
 
+}
+function authenticateToken(token)
+{
+    if (token) {
+        try {
+            var decoded = jwt.verify(token, 'karkun');
+            console.log(decoded)
+            return decoded.userdata
+        } catch (e) {
+          console.log(e)
+            return e
+        }
+    
+      } else {
+        return -1
+      }
 }
 module.exports = Film;
