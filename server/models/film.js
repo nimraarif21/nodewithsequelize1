@@ -32,14 +32,24 @@ average_score: {
     film.hasMany(models.rating, { as: 'ratings' })
   };
 
-const setAverage_score = film => {
-    
-}
-film.beforeCreate(setAverage_score)
-film.beforeUpdate(setAverage_score)
+  film.prototype.setAverage_score = async function (filmData) {
+    let ratings = await filmData.getRatings()
+    let score=0;
+   score=ratings.reduce((a, b) => ({score: a.score + b.score}))
+    let avg=score.score/ratings.length;
+    avg=Math.floor(avg);
 
+   await filmData.update({
+      average_score:avg
+    })
+  }
   return film;
 };
+
+
+
+
+
 
 
 

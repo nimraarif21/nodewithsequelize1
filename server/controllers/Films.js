@@ -48,6 +48,7 @@ class Film {
             let Rating = await rating.create({score})
             await userdata.addRatings(Rating)
             await filmdata.addRatings(Rating)
+            await filmdata.setAverage_score(filmdata)
             res.status(201).send({ success: true, message: 'Rating successfully added', filmdata }) 
 
           } catch(error){
